@@ -1,16 +1,26 @@
 # action.yml
-name: 'Hello World'
-description: 'Greet someone and record the time'
+name: 'JulieOps'
+description: 'Kafka Ops management agent for CI/CD gitops'
 inputs:
-  who-to-greet:  # id of input
-    description: 'Who to greet'
+  brokers:  # brokers targeted by this agent
+    description: 'A list of brokers where this agent is going to connect'
     required: true
-    default: 'World'
+    default: ''
+  topology:  # The topology file location
+    description: 'The location for your topology file'
+    required: true
+    default: '/opt/julieops/topology.yml'
+  config:  # A config file used by JulieOps
+    description: 'The config file used by JulieOps'
+    required: true
+    default: '/opt/julieops/config.properties'
 outputs:
-  time: # id of output
-    description: 'The time we greeted you'
+   state: # The current state in the cluster
+    description: 'The current generated state in the cluster'
 runs:
   using: 'docker'
   image: 'Dockerfile'
   args:
-    - ${{ inputs.who-to-greet }}
+    - ${{ inputs.brokers }}
+    - ${{ inputs.topology }}
+    - ${{ inputs.config }}
